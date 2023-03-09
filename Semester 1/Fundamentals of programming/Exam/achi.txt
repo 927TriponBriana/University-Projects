@@ -1,0 +1,302 @@
+class Board:
+    def __init__(self):
+        self.__data = [[" "] * 3 for i in range(3)]
+
+    def create_board(self):
+        board = Texttable()
+        for index in range(3):
+            board.add_row(self.__data[index])
+        return board.draw()
+    def update_data(self, d):
+        self.__data = d
+
+    def get_data(self):
+        return self.__data
+
+    def move_x(self, row, col):
+        if row > 2 or col > 2 or row < 0 or col < 0:
+            raise ValueError("Invalid row/column values!")
+        if self.__data[row][col] == ' ':
+            self.__data[row][col] = 'X'
+        else:
+            raise ValueError("Square already occupied!")
+
+    def move_o(self, row, col):
+        if row > 2 or col > 2 or row < 0 or col < 0:
+            raise ValueError("Invalid row/column values!")
+        if self.__data[row][col] == ' ':
+            self.__data[row][col] = 'O'
+        else:
+            raise ValueError("Square already occupied!")
+    def replace_x(self, row, col, row1, col1):
+        """
+        program moves x from square (row, col) to square (row1, col1)
+        :param row:
+        :param col:
+        :param row1:
+        :param col1:
+        :return:
+        """
+        if self.__data[row][col] == "X" and self.__data[row1][col1] == ' ' and ((row == row1 or row == row1 - 1 or row == row1 +1) and (col == col1 or col == col1 - 1 or col == col1 + 1)):
+            self.__data[row1][col1] = 'X'
+            self.__data[row][col] = ' '
+        else:
+            raise ValueError("Invalid move!")
+
+    def replace_o(self, row, col, row1, col1):
+        """
+        program moves O from square (row, col) to square (row1, col1)
+        """
+        if self.__data[row][col] == "O" and self.__data[row1][col1] == ' ':
+            self.__data[row1][col1] = 'O'
+            self.__data[row][col] = ' '
+        else:
+            raise ValueError("Invalid move!")
+
+    def find_empty_and_replace(self):
+        ok = 0
+        for i in range(0,3):
+            for j in range(0,3):
+                if self.__data[i][j] == ' ':
+                    self.__data[i][j] = 'O'
+                    ok = 1
+                if ok == 1:
+                    ok = 2
+                    break
+            if ok == 2:
+                break
+
+    def find_o(self):
+        for i in range(0, 3):
+            for j in range(0, 3):
+                if self.__data[i][j] == 'O':
+                    return i, j
+
+    def find_empty(self):
+        for i in range(0, 3):
+            for j in range(0, 3):
+                if self.__data[i][j] == ' ':
+                    return i, j
+
+    def won_game(self):
+        if self.__data[0] == ['X', 'X', 'X'] or self.__data[0] == ['O', 'O', 'O']:
+            return True
+        elif self.__data[1] == ['X', 'X', 'X'] or self.__data[0] == ['O', 'O', 'O']:
+            return True
+        elif self.__data[2] == ['X', 'X', 'X'] or self.__data[0] == ['O', 'O', 'O']:
+            return True
+        elif self.__data[0][0] == 'X' and self.__data[1][1] == 'X' and self.__data[2][2] == 'X':
+            return True
+        elif self.__data[0][0] == 'O' and self.__data[1][1] == 'O' and self.__data[2][2] == 'O':
+            return True
+        elif self.__data[0][2] == 'X' and self.__data[1][1] == 'X' and self.__data[2][0] == 'X':
+            return True
+        elif self.__data[0][2] == 'O' and self.__data[1][1] == 'O' and self.__data[2][0] == 'O':
+            return True
+        elif self.__data[0][0] == 'X' and self.__data[0][1] == 'X' and self.__data[0][2] == 'X':
+            return True
+        elif self.__data[0][0] == 'O' and self.__data[0][1] == 'O' and self.__data[0][2] == 'O':
+            return True
+        elif self.__data[1][0] == 'X' and self.__data[1][1] == 'X' and self.__data[1][2] == 'X':
+            return True
+        elif self.__data[1][0] == 'O' and self.__data[1][1] == 'O' and self.__data[1][2] == 'O':
+            return True
+        elif self.__data[2][0] == 'X' and self.__data[2][1] == 'X' and self.__data[2][2] == 'X':
+            return True
+        elif self.__data[2][0] == 'O' and self.__data[2][1] == 'O' and self.__data[2][2] == 'O':
+            return True
+
+    def dont_move(self):
+        ok = 0
+        for i in range(0,3):
+            if self.__data[i] == ['X', 'X', ' ']:
+                self.__data[i] = ['x', 'X', 'O']
+                ok = 1
+            elif self.__data[i] == [' ', 'X', 'X']:
+                self.__data[i] = ['O', 'X', 'X']
+                ok=1
+            elif self.__data[i] == ['X', ' ', 'X']:
+                self.__data[i] = ['X', 'O', 'X']
+                ok = 1
+        if ok == 0:
+            if self.__data[0][0] == 'X' and self.__data[1][1] == 'X' and self.__data[2][2] == ' ':
+                self.__data[2][2] = 'O'
+                ok = 1
+            elif self.__data[0][0] == 'X' and self.__data[1][1] == ' ' and self.__data[2][2] == 'X':
+                self.__data[2][2] = 'O'
+                ok = 1
+            elif self.__data[0][0] == ' ' and self.__data[1][1] == 'X' and self.__data[2][2] == 'X':
+                self.__data[2][2] = 'O'
+                ok = 1
+            elif self.__data[0][2] == 'X' and self.__data[1][1] == 'X' and self.__data[2][0] == ' ':
+                self.__data[2][0] = 'O'
+                ok = 1
+            elif self.__data[0][2] == 'X' and self.__data[1][1] == ' ' and self.__data[2][0] == 'X':
+                self.__data[1][1] = 'O'
+                ok = 1
+            elif self.__data[0][2] == ' ' and self.__data[1][1] == 'X' and self.__data[2][0] == 'X':
+                self.__data[0][2] = 'O'
+                ok = 1
+            elif self.__data[0][0] == ' ' and self.__data[1][0] == 'X' and self.__data[2][0] == 'X':
+                self.__data[0][0] = 'O'
+                ok = 1
+            elif self.__data[0][0] == 'X' and self.__data[1][0] == ' ' and self.__data[2][0] == 'X':
+                self.__data[1][0] = '2'
+                ok = 1
+            elif self.__data[0][0] == 'X' and self.__data[1][0] == 'X' and self.__data[2][0] == ' ':
+                self.__data[2][0] = 'O'
+                ok = 1
+            elif self.__data[0][1] == ' ' and self.__data[1][1] == 'X' and self.__data[2][1] == 'X':
+                self.__data[0][1] = 'O'
+                ok = 1
+            elif self.__data[0][1] == 'X' and self.__data[1][1] == ' ' and self.__data[2][1] == 'X':
+                self.__data[1][1] = 'O'
+                ok = 1
+            elif self.__data[0][1] == 'X' and self.__data[1][1] == 'X' and self.__data[2][1] == ' ':
+                self.__data[2][1] = 'O'
+                ok = 1
+            elif self.__data[0][2] == 'X' and self.__data[1][2] == 'X' and self.__data[2][2] == ' ':
+                self.__data[2][2] = 'O'
+                ok = 1
+            elif self.__data[0][2] == 'X' and self.__data[1][2] == 'X' and self.__data[2][2] == ' ':
+                self.__data[0][2] = 'O'
+                ok = 1
+            elif self.__data[0][2] == 'X' and self.__data[1][2] == ' ' and self.__data[2][2] == 'X':
+                self.__data[1][2] = 'O'
+                ok = 1
+            elif self.__data[0][2] == ' ' and self.__data[1][2] == 'X' and self.__data[2][2] == 'X':
+                self.__data[0][2] = 'O'
+                ok = 1
+            if ok == 0:
+                ok = 0
+                for i in range(0, 3):
+                    for j in range(0, 3):
+                        if self.__data[i][j] == ' ':
+                            self.__data[i][j] = 'O'
+                            ok = 1
+                        if ok == 1:
+                            ok = 2
+                            break
+                    if ok == 2:
+                        break
+-------------------------
+class Controller:
+    def __init__(self, repo):
+        self.__repo = repo
+
+    def move_x(self, i, j):
+        """moves x to a squere"""
+        self.__repo.move_x(i, j)
+
+    def move_o(self, i, j):
+        """moves o to a squere"""
+        self.__repo.move_o(i, j)
+
+    def print_board(self):
+        return self.__repo.create_board()
+
+    def find_empty(self):
+        self.__repo.find_empty_and_replace()
+
+    def replace_x(self, row, col, row1, col1):
+        try:
+            self.__repo.replace_x(row, col, row1, col1)
+        except ValueError as ve:
+            raise ValueError(ve)
+
+    def move_o_from_square_to_another(self):
+        row, col = self.__repo.find_o()
+        row1, col1 = self.__repo.find_empty()
+        self.__repo.replace_o(row, col, row1, col1)
+
+    def won_game(self):
+        return self.__repo.won_game()
+
+    def get_data_board(self):
+        return self.__repo.get_data()
+
+    def dont_move(self):
+        self.__repo.dont_move()
+------------------------
+class UI:
+    def __init__(self, controller):
+        self.__controller = controller
+
+    def start(self):
+        nr = 0
+        while True:
+            ok = 0
+            print(self.__controller.print_board())
+            if nr < 4:
+                print("Choose a square to place: ")
+                row = int(input("Enter the row: "))
+                col = int(input("Enter the column: "))
+                try:
+                    self.__controller.move_x(row, col)
+                    print(self.__controller.print_board())
+                    nr  = nr + 1
+                    ok = 1
+                    if self.__controller.won_game() is True:
+                        print("You won! :)")
+                        break
+                except ValueError as ve:
+                    print(ve)
+                if ok == 1 and nr == 1:
+                    self.__controller.find_empty()
+                    if self.__controller.won_game() is True:
+                        print("You lost! :(")
+                        break
+                elif ok == 1 and nr > 1:
+                    try:
+                        self.__controller.dont_move()
+                        if self.__controller.won_game() is True:
+                            print("You lost! :(")
+                            print(self.__controller.print_board())
+                            break
+                    except ValueError:
+                        self.__controller.find_empty()
+            if nr == 4:
+                print("Choose a square to move from: ")
+                valid = 0
+                while valid == 0:
+                    row = int(input("Enter the row: "))
+                    col = int(input("Enter the column: "))
+                    if row < 3 and col < 3 and row >= 0 and col >= 0:
+                        valid = 1
+                    else:
+                        print("Invalid input!")
+                print("Choose a square where to be moved : ")
+                valid = 0
+                while valid == 0:
+                    row1 = int(input("Enter the row: "))
+                    col1 = int(input("Enter the column: "))
+                    if row1 < 3 and col1 < 3 and row1 >= 0 and col1 >= 0:
+                        valid = 1
+                    else:
+                        print("Invalid input!")
+                try:
+                    self.__controller.replace_x(row, col, row1, col1)
+                    print(self.__controller.print_board())
+                    if self.__controller.won_game() is True:
+                        print("You won! :)")
+                        break
+                    ok = 1
+                except ValueError as ve:
+                    print(ve)
+                if ok == 1:
+                    self.__controller.move_o_from_square_to_another()
+                    if self.__controller.won_game() is True:
+                        print("You lost! :(")
+                        print(self.__controller.print_board())
+                        break
+                    ok = 0
+-----------------------
+def tests():
+    board = Board()
+    controller = Controller(board)
+    controller.move_x(1, 1)
+    assert board.get_data() == [[' ', ' ', ' '], [' ', 'X', ' '], [' ', ' ', ' ']]
+    controller.move_o(2, 2)
+    assert board.get_data() == [[' ', ' ', ' '], [' ', 'X', ' '], [' ', ' ', 'O']]
+    controller.replace_x(1, 1, 0, 0)
+    assert board.get_data() == [['X', ' ', ' '], [' ', ' ', ' '], [' ', ' ', 'O']]

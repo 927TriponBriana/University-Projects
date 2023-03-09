@@ -1,0 +1,248 @@
+class QuizDomain:
+    def __init__(self, q_id, text, choice_a, choice_b, choice_c, correct_answ, difficulty):
+        self.__q_id = q_id
+        self.__text = text
+        self.__choice_a = choice_a
+        self.__choice_b = choice_b
+        self.__choice_c = choice_c
+        self._correct_answ = correct_answ
+        self.__difficulty = difficulty
+
+    def get_q_id(self):
+        return self.__q_id
+
+    def get_text(self):
+        return self.__text
+
+    def get_choice_a(self):
+        return self.__choice_a
+
+    def get_choice_b(self):
+        return self.__choice_b
+
+    def get_choice_c(self):
+        return self.__choice_c
+
+    def get_correct_answ(self):
+        return self._correct_answ
+
+    def get_difficulty(self):
+        return self.__difficulty
+
+    def print_format(self):
+        return str(str(self.__q_id) + ' ' + str(self.__text) + ' ' + str(self.__choice_a) + ' ' + str(self.__choice_b) + ' ' + str(self.__choice_c) + ' ' + str(self._correct_answ) + ' ' + str(self.__difficulty))
+
+    def from_file(self, given_input):
+        given_input = given_input.split(';')
+        input_id = given_input[0]
+        input_text = given_input[1]
+        input_a = given_input[2]
+        input_b = given_input[3]
+        input_c = given_input[4]
+        input_correct = given_input[5]
+        input_difficulty = given_input[6]
+        return input_id, input_text, input_a, input_b, input_c, input_correct, input_difficulty
+
+    def to_file(self):
+        return '\n' + str(str(self.__q_id) + ';' + str(self.__text) + ';' + str(self.__choice_a) + ';' + str(self.__choice_b) + ';' + str(self.__choice_c) + ';' + str(self._correct_answ) + ';' + str(self.__difficulty))
+---------------------------------
+class RepoQuiz:
+    def __init__(self, file_path):
+        self.__list_of_questions = []
+        self.__file_path = file_path
+
+    def read_from_file(self):
+        """
+        reads from the given file the questions
+        :return:
+        """
+        with open(self.__file_path, 'r') as read_file:
+            lines = read_file.readlines()
+            for line in lines:
+                line = line.strip()
+                if len(line):
+                    quiz_id, text, choice_a, choice_b, choice_c, correct_answ, difficulty = self.split_the_given_input(line)
+                    quiz_id = int(quiz_id)
+                    self.__list_of_questions.append(QuizDomain(quiz_id, text, choice_a, choice_b, choice_c, correct_answ, difficulty ))
+
+    def add_to_file(self, question):
+        """
+        appends to the file the newly added question
+        :param question:
+        :return:
+        """
+        with open(self.__file_path, 'a') as write_file:
+            question_to_write = question.to_file()
+            write_file.write(str(question_to_write))
+
+    def init_data(self):
+        self.read_from_file()
+        return self.__list_of_questions
+
+    def add_question(self, given_input):
+        """
+        add a question to the list of questions
+        :param given_input:
+        :return:
+        """
+        q_id, text, choice_a, choice_b, choice_c, correct_answ, difficulty = self.split_the_given_input(given_input)
+        q_id = q_id.split()[1]
+        self.check_valid_input(q_id, text, choice_a, choice_b, choice_c, correct_answ, difficulty)
+        self.__list_of_questions.append(QuizDomain(q_id, text, choice_a, choice_b, choice_c, correct_answ, difficulty))
+        self.add_to_file(QuizDomain(q_id, text, choice_a, choice_b, choice_c, correct_answ, difficulty))
+
+    def check_valid_input(self, q_id, text, choice_a, choice_b, choice_c, correct_answ, difficulty):
+        if int(q_id) < 0 and not str(q_id).isnumeric():
+            raise ValueError("Invalid id!")
+        if str(text).isnumeric():
+            raise ValueError("invalid question text!")
+
+    def split_the_given_input(self, given_input):
+        given_input = given_input.split(';')
+        if len(given_input) != 7:
+            raise ValueError("Invalid number of parameters!")
+        input_id = given_input[0]
+        input_text = given_input[1]
+        input_a = given_input[2]
+        input_b = given_input[3]
+        input_c = given_input[4]
+        input_correct = given_input[5]
+        input_difficulty = given_input[6]
+        return input_id, input_text, input_a, input_b, input_c, input_correct, input_difficulty
+
+    def get_list_of_elements(self):
+        list_to_print = ''
+        for element in self.__list_of_questions:
+            print(element.print_format())
+        return list_to_print
+
+    def start_quiz(self, parameters):
+        """
+        starts a quiz
+        :param parameters:
+        :return:
+        """
+        list_current_quiz = []
+        first_parameter, second_parameter = self.split_parameters(parameters)
+        if second_parameter not in possible_quizes:
+            raise ValueError("Given file does not exist!")
+        with open(str(second_parameter), 'r') as quiz:
+            lines = quiz.readlines()
+            for line in lines:
+                line = line.strip()
+                if len(line):
+                    q_id, text, choice_a, choice_b, choice_c, correct_answ, difficulty = self.split_the_given_input(line)
+                    q_id = int(q_id)
+                    list_current_quiz.append(QuizDomain(q_id, text, choice_a, choice_b, choice_c, correct_answ, difficulty))
+        return list_current_quiz
+
+    def playing(self, list, index):
+        """
+        checks if we are still playing
+        :param list:
+        :param index:
+        :return:
+        """
+        return index != len(list)
+
+    def keep_playing(self, element_list, index):
+        """
+        check if we are still playing
+        :param element_list:
+        :param index:
+        :return:
+        """
+        question_to_print = ''
+        for element in element_list:
+            if int(element.get_q_id()):
+                question_to_print += str(element.get_q_id()) + ' ' + str(element.get_text()) + ' ' + str(element.get_choice_a()) + ' ' + str(element.get_choice_b()) + ' ' + str(element.get_choice_c()) + ' ' + str(element.get_correct_answ()) + ' ' + str(element.get_difficulty())
+        return question_to_print
+
+    def check_answer_is_correct(self, answer, index, list_of_elements):
+        for elements in list_of_elements:
+            if (elements.get_q_id() == index) and elements.get_correct_answ() == answer:
+                return True
+        return False
+
+    def split_parameters(self, parameters):
+        given_param = parameters.split(' ')
+        if len(given_param) != 2:
+            raise ValueError("Invalid number of parameters to start the quiz!")
+        return given_param[0], given_param[1]
+
+possible_quizes = ['questions']
+--------------------------------
+class ControllerQuiz:
+    def __init__(self, repo):
+        self.__repo = repo
+
+    def add_new_question(self, question):
+        return self.__repo.add_question(question)
+
+    def init_list(self):
+        return self.__repo.init_data()
+
+    def fet_list(self):
+        return self.__repo.get_list_of_elements()
+
+    def start_quiz(self, quiz):
+        return self.__repo.start_quiz(quiz)
+
+    def are_we_playing(self, list_of_elem, index):
+        return self.__repo.playing(list_of_elem, index)
+
+    def keep_playing(self, list, current_index):
+        return self.__repo.keep_playing(list, current_index)
+
+    def check_correct_answer(self, answer, index, list_of_elements):
+        return self.__repo.check_answer_is_correct(answer, index, list_of_elements)
+-------------------------
+class UI:
+    def __init__(self, controller):
+        self.__controller = controller
+
+    @staticmethod
+    def print_menu():
+        print("Add a new question.")
+        print("Start a quiz. (questions)")
+        print("Exit.")
+
+    def start(self):
+        self.__controller.init_list()
+        self.print_menu()
+        while True:
+            try:
+                user_input = input("Enter your option: ")
+                if len(user_input) < 1:
+                    raise ValueError("Invalid option!")
+                if self.split_parameters(user_input).lower() == 'add':
+                    self.__controller.add_new_question(user_input)
+                    print("Question added successfully!")
+                elif self.split_parameters(user_input).lower() == 'exit':
+                    return
+                elif self.split_parameters(user_input).lower() == 'start':
+                    list_of_questions = self.__controller.start_quiz(user_input)
+                    are_we_still_playing = True
+                    index = 1
+                    while are_we_still_playing:
+                        try:
+                            are_we_still_playing = self.__controller.are_we_playing(list_of_questions, index)
+                            current_question = self.__controller.keep_playing(list_of_questions, index)
+                            print(current_question)
+                            user_choice = input("Enter your choice: ")
+                            answer = self.__controller.check_correct_answer(user_choice, index, list_of_questions)
+                            index += 1
+                            print(answer)
+                        except ValueError as ve:
+                            print(str(ve))
+            except ValueError as ve:
+                print(str(ve))
+
+    def split_parameters(self, user_option):
+        user_option = user_option.split()
+        return user_option[0]
+-------------------
+repo = RepoQuiz('questions')
+controller = ControllerQuiz(repo)
+ui = UI(controller)
+ui.start()

@@ -1,0 +1,189 @@
+class Bus:
+    def __init__(self, bus_id, route_code, model, times_used_on_route):
+        self.__bus_id = bus_id
+        self.__route_code = route_code
+        self.__model = model
+        self.__times_used_on_route = times_used_on_route
+
+    def get_bus_id(self):
+        return self.__bus_id
+
+    def get_route_code(self):
+        return self.__route_code
+
+    def get_model(self):
+        return self.__model
+
+    def get_times_used_on_route(self):
+        return self.__times_used_on_route
+
+    def __str__(self):
+        s = ''
+        s += str(self.__bus_id)
+        s += ' '
+        s += str(self.__route_code)
+        s += ' '
+        s += str(self.__model)
+        s += ' '
+        s += str(self.__times_used_on_route)
+        return s
+-------------------------
+class Route:
+    def __init__(self, code, length):
+        self.__code = code
+        self.__length = length
+
+    def get_code(self):
+        return self.__code
+
+    def get_length(self):
+        return self.__length
+
+    def __str__(self):
+        s = ''
+        s += str(self.__code)
+        s += ' '
+        s += str(self.__length)
+        return s
+-----------------------
+class BusRepo:
+    def __init__(self, file_name):
+        self.__buses = []
+        file = open(file_name, "r")
+        lines = file.readlines()
+        for line in lines:
+            line = line.strip()
+            line = line.split(',')
+            self.__buses.append(Bus(int(line[0]), int(line[1]), line[2], int(line[3])))
+        file.close()
+
+    def get_all_buses(self):
+        return self.__buses[:]
+
+    def get_bus_by_id(self, bus_id):
+        for bus in self.get_all_buses():
+            if bus.get_bus_id() == bus_id:
+                return bus
+----------------------------
+class RouteRepo:
+    def __init__(self, file_name):
+        self.__routes = []
+        file = open(file_name, "r")
+        lines = file.readlines()
+        for line in lines:
+            line = line.strip()
+            line = line.split(',')
+            self.__routes.append(Route(int(line[0]), int(line[1])))
+        file.close()
+
+    def get_all_routes(self):
+        return self.__routes[:]
+
+    def get_route_by_code(self, route_code):
+        for route in self.get_all_routes():
+            if route.get_code() == route_code:
+                return route
+-----------------------
+class Controller:
+    def __init__(self, route_repo, bus_repo):
+        self.__route_repo = route_repo
+        self.__bus_repo = bus_repo
+
+    def get_bus_on_route(self, route_code):
+        buses_on_route = []
+        buses = self.__bus_repo.get_all_buses()
+        for bus in buses:
+            if bus.get_route_code() == route_code:
+                buses_on_route.append(bus)
+        return buses_on_route[:]
+
+    def increase_usage(self, bus_id, route_code):
+        buses = self.__bus_repo.get_all_buses()
+        usage = 0
+        for bus in buses:
+            if bus.get_bus_id() == bus_id and bus.get_route_code() == route_code:
+                usage = bus.get_times_used_on_route()
+                usage += 1
+        return usage
+
+    def compute_travel_distance(self, bus_id):
+        total = 0
+        bus = self.__bus_repo.get_bus_by_id(bus_id)
+        route_code = bus.get_route_code()
+        route = self.__route_repo.get_route_by_code(route_code)
+        length = route.get_length()
+        times_used = bus.get_times_used_on_route()
+        total = total + length * times_used
+        return total
+---------------------
+class UI:
+    def __init__(self, controller):
+        self.__controller = controller
+
+    @staticmethod
+    def print_menu():
+        print("1. Display all buses from a given route.")
+        print("2. Increase usage.")
+        print("3. Total distance of a bus.")
+        print("0. Exit.")
+
+    def start(self):
+        while True:
+            self.print_menu()
+            option = input("Enter option: ").strip()
+            if option == '1':
+                route_code = int(input("Enter the route code for which you want to see all the buses: "))
+                buses = self.__controller.get_bus_on_route(route_code)
+                if buses == []:
+                    print("No buses on this route!")
+                for bus in buses:
+                    print(bus)
+            elif option == '2':
+                bus_id = int(input("Enter a bus id: "))
+                route_code = int(input("Enter a route code: "))
+                if not isinstance(bus_id, int):
+                    print("The bus id must be an integer number!")
+                if not isinstance(route_code, int):
+                    print("The route code must be an integer number!")
+                usage = self.__controller.increase_usage(bus_id, route_code)
+                print(usage)
+            elif option == '3':
+                bus_id = int(input("Enter a bus id: "))
+                total_distance = self.__controller.compute_travel_distance(bus_id)
+                print(total_distance)
+            elif option == '0':
+                return
+-------------------------
+class Test(unittest.TestCase):
+    def setUp(self) -> None:
+        self.__route_repo = RouteRepo("routes")
+        self.__bus_repo = BusRepo("buses")
+        self.__controller = Controller(self.__route_repo, self.__bus_repo)
+
+    def test_get_bus_on_route(self):
+        buses = self.__controller.get_bus_on_route(5)
+        self.assertEqual(buses[0].get_times_used_on_route(), 7)
+        self.assertEqual(buses[1].get_times_used_on_route(), 1)
+        self.assertNotEqual(buses[1].get_model(), "dacia")
+
+    def test_increase_usage(self):
+        usage = self.__controller.increase_usage(1, 1)
+        self.assertEqual(usage, 4)
+        usage = self.__controller.increase_usage(2, 1)
+        self.assertNotEqual(usage, 15)
+
+    def test_compute_travel_distance(self):
+        total = self.__controller.compute_travel_distance(1)
+        self.assertEqual(total, 30)
+        total = self.__controller.compute_travel_distance(3)
+        self.assertNotEqual(total, 90)
+
+if __name__ == "__main__":
+    unittest.main()
+--------------------------
+route_repo = RouteRepo("routes")
+bus_repo = BusRepo("buses")
+controller = Controller(route_repo, bus_repo)
+
+ui = UI(controller)
+ui.start()

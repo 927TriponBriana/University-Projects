@@ -1,0 +1,232 @@
+class date:
+    def __init__(self, day, month):
+        self.__day = day
+        self.__month = month
+
+    def get_day(self):
+        return self.__day
+
+    def get_month(self):
+        return self.__month
+
+    def __str__(self):
+        s = ''
+        s += self.__month
+        s += '.'
+        s += self.__day
+        return s
+------------------
+class Room:
+    def __init__(self, number, r_type):
+        self.__number = number
+        self.__r_type = r_type
+
+    def get_number(self):
+        return self.__number
+
+    def get_type(self):
+        return self.__r_type
+
+    def __str__(self):
+        s = ''
+        s += str(self.__number)
+        s += ' '
+        s += self.__r_type
+        return s
+------------------------
+class Reservation:
+    def __init__(self, r_id, room_nr, family_name, nr_guests, arr_date, dep_date):
+        self.__r_id = r_id
+        self.__room_nr = room_nr
+        self.__family_name = family_name
+        self.__nr_guests = nr_guests
+        self.__arr_date = arr_date
+        self.__dep_date = dep_date
+
+    def get_r_id(self):
+        return self.__r_id
+
+    def get_room_nr(self):
+        return self.__room_nr
+
+    def get_family_name(self):
+        return self.__family_name
+
+    def get_nr_guests(self):
+        return self.__nr_guests
+
+    def get_arr_date(self):
+        return self.__arr_date
+
+    def get_dep_date(self):
+        return self.__dep_date
+
+    def __str__(self):
+        s = ''
+        s += str(self.__r_id)
+        s += ' '
+        s += str(self.__room_nr)
+        s += ' '
+        s += str(self.__family_name)
+        s += ' '
+        s += str(self.__nr_guests)
+        s += ' '
+        s += str(self.__arr_date)
+        s += ' '
+        s += str(self.__dep_date)
+        return s
+-------------------------
+class RoomRepo:
+    def __init__(self):
+        self.__data = []
+
+    def add_room(self, room):
+        self.__data.append(room)
+
+    def remove_room(self, nr):
+        index = 0
+        while self.__data[index].get_number() != nr:
+            index += 1
+        self.__data.pop(index)
+
+    def get_all(self):
+        return self.__data
+---------------------------
+class ReservationRepo:
+    def __init__(self):
+        self.__data = []
+
+    def add_reservation(self, reserv):
+        self.__data.append(reserv)
+
+    def remove_reservation(self, r_id):
+        index = 0
+        while self.__data[index].get_r_id() != r_id:
+            index += 1
+        self.__data.pop(index)
+
+    def get_all(self):
+        return self.__data
+---------------------------
+class OccupiedRooms:
+    def __init__(self):
+        self.__data = []
+
+    def add_room(self, room):
+        self.__data.append(room)
+
+    def remove_room(self, nr):
+        index = 0
+        while self.__data[index].get_number() != nr:
+            index += 1
+        self.__data.pop(index)
+
+    def get_all(self):
+        return self.__data
+----------------------------
+class ReservationController:
+    def __init__(self, reservation_repo, room_repo, occupied_repo):
+        self.__reservation_repo = reservation_repo
+        self.__room_repo = room_repo
+        self.__occupied_repo = occupied_repo
+
+    def add_reservation(self, r):
+        reservations = self.__reservation_repo.get_all()
+        for reservation in reservations:
+            if reservation.get_room_nr() == r.get_room_nr():
+                raise ValueError("Room is not available")
+        if int(r.get_arr_date().get_month()) > int(r.get_dep_date().get_month()) or (int(r.get_arr_date().get_month()) == int(r.get_dep_date().get_month()) and int(r.get_arr_date().get_day()) > int(r.get_dep_date().get_day())):
+            raise ValueError("Invalid dates")
+        self.__reservation_repo.add_reservation(r)
+
+    def add_free(self, r):
+        self.__room_repo.add_room(r)
+
+    def add_occupied(self, r):
+        self.__occupied_repo.add_room(r)
+
+    def remove_free(self, nr):
+        self.__room_repo.remove_room(nr)
+
+    def remove_reservation(self, r_id):
+        self.__reservation_repo.remove_reservation(r_id)
+
+    def remove_occupied(self, nr):
+        self.__occupied_repo.remove_room(nr)
+
+    def get_all_free(self):
+        return self.__room_repo.get_all()
+
+    def get_all_occupied(self):
+        return self.__occupied_repo.get_all()
+
+    def get_all_reservation(self):
+        return self.__reservation_repo.get_all()
+----------------------------------
+class UI:
+    def __init__(self, controller):
+        self.__controller = controller
+
+    @staticmethod
+    def print_menu():
+        print("1. Create reservation")
+        print("2. List all reservations")
+        print("3. Delete reservation")
+        print("4. Show available rooms")
+        print("0. Exit")
+
+    def main(self):
+        ok = True
+        while ok:
+            UI.print_menu()
+            option = input("Enter option: ")
+            if option == '1':
+                index = 0
+                fam_name = input("Enter family name: ")
+                room_type = input("Enter room type: ")
+                nr_guests = int(input("Enter number of guests: "))
+                arr_date_month = input("Enter arrival date month (mm): ")
+                arr_date_day = input("Enter arrival date day (dd): ")
+                dep_date_month = input("Enter departure date month (mm): ")
+                dep_date_day = input("Enter departure date day (dd): ")
+                free = self.__controller.get_all_free()
+                for room in free:
+                    if str(room.get_type()) == str(room_type) and index == 0:
+                        reserve_room = Room(room.get_number(), room.get_type())
+                        self.__controller.remove_free(room.get_number())
+                        self.__controller.add_occupied(reserve_room)
+                        index = 1
+                if index == 0:
+                    print("No free room of the specified type!")
+                else:
+                    r_id = UI.generate_id()
+                    try:
+                        self.__controller.add_reservation(Reservation(r_id, reserve_room.get_number(), fam_name, nr_guests, date(arr_date_month, arr_date_day), date(dep_date_month, dep_date_day)))
+                    except ValueError as ve:
+                        print(ve)
+            elif option == '2':
+                for index in self.__controller.get_all_reservation():
+                    print(index)
+            elif option == '3':
+                r_id = int(input("Enter a 4 digit id: "))
+                reservations = self.__controller.get_all_reservation()
+                for reservation in reservations:
+                    if reservation.get_r_id() == r_id:
+                        for index in self.__controller.get_all_occupied():
+                            if index.get_number() == reservation.get_room_nr():
+                                r_type = index.get_type()
+                        self.__controller.remove_occupied(reservation.get_room_nr())
+                        self.__controller.add_free(Room(reservation.get_room_nr(), r_type))
+                        self.__controller.remove_reservation(r_id)
+                    else:
+                        print("Reservation with this id does not exist!")
+            elif option == '4':
+                for index in self.__controller.get_all_free():
+                    print(index)
+            elif option == '0':
+                return
+
+    @staticmethod
+    def generate_id():
+        r_id = randint(1000, 9999)
+        return r_id
