@@ -1,0 +1,7 @@
+the call to pthread_create creates and starts a thread that executes
+the given function pointer f, and populates the thread handler t.
+
+the call to pthread_join waits for the thread identified by the
+handle t to finish.
+
+to compile: gcc -Wall -g -o ex ex.c -pthread

@@ -1,0 +1,40 @@
+Lab 2
+
+gcc - creaza un fisier a.out daca nu se specifica numele fisierului
+-o ... ... -> primul lucru dupa -o este numele fisierului dupa care directiorul
+man man -> mai multe sectiuni; o sa ne intereseze sectiunea 1,2,3
+whatis printf -> imi zice unde gasesc printf in manual
+man 3 printf
+
+TEST sapt viitoare:
+program gata facut cu erori si warning uri pe care trb sa le corectam
+
+malloc -> aloca spatiu in memorie
+
+
+ctrl k h -> help
+ctrl k x -> iese dar si salveaza
+ctrl k d -> doar salveaza dar nu iese
+
+
+create a hello word C programm:
+
+joe [program name].c (ca scriem in C)
+deschide preogramul daca exista, daca nu face un file nou
+daca modificam ceva dam ctrl K X
+
+gcc -Wall -g -o hello hello.c 
+
+valgrind ./hello-remember < names.txt
+
+
+
+LAB 3
+man grep
+. tine loc de orice caracter
+^ 
+$ sfarsit de linie
+<> inceput si 
+
+
+

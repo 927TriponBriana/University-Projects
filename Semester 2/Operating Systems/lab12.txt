@@ -1,0 +1,66 @@
+#include <stdion.h>
+	 <stdlib.h>
+	 <pthread.h>
+
+void * thread(void *arg)
+{
+	printf("I don't wanna be here!");  //printf("%d I don't wanna be here!\n", *(int*)arg);
+	return 0;
+}
+
+int main(int argc, charr **argv)
+{
+	int n;
+	n=atoi(argv[1]);
+	pthread_t *t;
+	t=malloc(sizeof(pthread_t)*n);
+	int i;
+	for (i=0; i<n; i++)
+	{
+	 pthread_create(&t[i],0,thread,0);    //pthread_create(&t[i], 0, thread, (void *)i);
+	}
+
+}
+
+$ gcc -Wall -o -g -pthread 1.c (filename)
+join - asteapta
+create - creeaza
+
+
+
+
+#include <stdion.h>
+	 <stdlib.h>
+	 <pthread.h>
+
+typedef struct
+{
+	int a,b;
+}pthread_arg;
+
+typedef struct
+{
+	int sum, prod;
+}pthread_ret;
+
+void * thread(void *arg)
+{
+	pthread_arg a;
+a=*(pthread_Arg *)arg;
+	printf("I don't wanna be here!");  //printf("%d I don't wanna be here!\n", *(int*)arg);
+	return 0;
+}
+
+int main(int argc, charr **argv)
+{
+	int n;
+	n=atoi(argv[1]);
+	pthread_t *t;
+	t=malloc(sizeof(pthread_t)*n);
+	int i;
+	for (i=0; i<n; i++)
+	{
+	 pthread_create(&t[i],0,thread,0);    //pthread_create(&t[i], 0, thread, (void *)i);
+	}
+
+}

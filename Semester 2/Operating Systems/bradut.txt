@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+int n=15;
+int copy_n=15;
+pthread_mutex_t m;
+pthread_t *x;
+pthread_t *y;
+int check=0;
+
+typedef struct{
+        int nr;
+}Arg;
+
+void* thr1(void* arg)
+{
+        Arg a=*((Arg*)arg);
+        int cycle=0;
+        while(cycle!=5)
+        {       if(check==0)
+                {
+                        while(copy_n>=0)
+                        {
+                        pthread_mutex_lock(&m);
+                        copy_n-=a.nr;
+                        pthread_mutex_unlock(&m);
+                }
+                printf("Global variable %d decreased by %d\n",n,copy_n);
+                check=1;
+                cycle++;
+                }
+        }
+        return 0;
+}
+
+void* thr2(void* arg)
+{
+        Arg a=*((Arg*)arg);
+        int cycle=0;
+        while(cycle!=5)
+        {       if(check==1)
+                {
+                while(copy_n<=n)
+                {
+                        pthread_mutex_lock(&m);
+                        copy_n+=a.nr;
+                        pthread_mutex_unlock(&m);
+                }
+                printf("Global variable %d  increased by %d\n",n,copy_n-n);
+                check=0;
+                cycle++;
+                }
+        }
+        return 0;
+}
+
+int main(int argc,char** argv)
+{
+        x=(pthread_t*)malloc(sizeof(pthread_t)*(argc-1));
+        y=(pthread_t*)malloc(sizeof(pthread_t)*(argc-1));
+        Arg *args;
+        args=malloc(sizeof(Arg)*(argc-1));
+        pthread_mutex_init(&m,0);
+        int i;
+        for(i=0;i<argc-1;i++)
+        {
+                args[i].nr=atoi(argv[i+1]);
+                pthread_create(&x[i],0,thr1,(void*)&args[i]);
+                pthread_create(&y[i],0,thr2,(void*)&args[i]);
+
+        }
+        for(i=0;i<argc-1;i++)
+        {
+                pthread_join(x[i],0);
+                pthread_join(y[i],0);
+        }
+        pthread_mutex_destroy(&m);
+        free(x);
+        free(y);
+        free(args);
+        return 0;
+}

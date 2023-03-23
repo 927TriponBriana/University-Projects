@@ -1,0 +1,45 @@
+
+
+sed -E "s/regex/replacement/gi"
+s iti zice ca vtei sa dai replace
+
+Sed -E "s/[aeiou]/2/gi" file.txt   ----> Iti schimba toate vocalele din fisierul file.txt in cifra 2
+gi -ul ala trebe pun in capat nush pentru ce dar g-ul vine de la global si i-ul vine de la faptul ca faci sa fie case insensitive
+
+Sed -E "y/chars/replacement/" a.txt
+sed "y/aeiou/AEIOU" a.txt    ----> a-urile mici ti le schimba in A-uri mari, e-urile mici in E-uri mari
+
+sed -E "/[0-9]{5,}/d" a.txt  ---> pt delete  
+echivalent cu grep -v -E "[0-9]{5,}" pentru ca v-ul asta la grep iti zice sa iei toate liniile care NU indeplinesc conditia ta
+
+
+Folosind utilitarul GREP afisati pe ecran toate liniile dintr-un fisier care
+contin un numar de caractere divizibil cu 3.
+grep -E '^(...)*$' filename
+
+	
+Folosind utilitarul GREP afisati pe ecran toate linile unui fisier care
+contin cel putin 3 vocale mari si nu contin cifre impare.
+grep -E '^[^13579]*([AEIOU][^13579]*)3'
+grep -E '^[^13579]*([AEIOU][^13579]*)'
+
+	
+Folosind utilitarul GREP afisati pe ecran toate linile unui fisier care
+incep cu un numar par de cifre impare si se termina cu un numar impar de
+cifre pare.
+grep -E "^([13579]{2})*[^13579].*[^02468][02468]([02468]{2})*$" filename
+
+
+Folosind utilitarul GREP afisati pe ecran toate linile unui fisier care
+contin cel mult 3 vocale mari si nu contin cifre impare.
+grep -E '^([^AEIOU13579]*[AEIOU]){,3}[^AEIOU13579]*$' filename
+
+
+Folosid utilitarul GREP fisati pe ecran toate caraterele care apar intre
+prima aparitie a caracterului '|' si ultima aparitie a caracterului '^'
+de pe toate linile dintr-un fisier.
+grep -o -E '\|.*^\' filename
+
+
+Using grep display how many lines from a file contains only big letters.
+grep -E '^[A-Z]*$' filename
