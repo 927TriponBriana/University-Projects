@@ -1,0 +1,7 @@
+﻿  App.cpp
+  ExtendedTest.cpp
+  Matrix.cpp
+  ShortTest.cpp
+  Generating Code...
+C:\Users\brian\Desktop\Matrix\Matrix.cpp(151): warning C4715: 'Matrix::modify': not all control paths return a value
+  Lab4.vcxproj -> C:\Users\brian\Desktop\Facultate\SemII\DSA\Lab4\x64\Debug\Lab4.exe
