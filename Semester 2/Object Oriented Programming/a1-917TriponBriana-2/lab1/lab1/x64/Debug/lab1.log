@@ -1,0 +1,5 @@
+﻿  Source.c
+C:\Users\brian\Documents\GitHub\a1-917TriponBriana-2\lab1\lab1\Source.c(31,22): warning C4013: 'check_if_prime' undefined; assuming extern returning int
+C:\Users\brian\Documents\GitHub\a1-917TriponBriana-2\lab1\lab1\Source.c(87,104): warning C4101: 'given_number': unreferenced local variable
+C:\Users\brian\Documents\GitHub\a1-917TriponBriana-2\lab1\lab1\Source.c(45): warning C4716: 'find_longest_subsequence': must return a value
+  lab1.vcxproj -> C:\Users\brian\Documents\GitHub\a1-917TriponBriana-2\lab1\x64\Debug\lab1.exe
