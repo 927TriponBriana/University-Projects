@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UFT-8">
+	<meta name="viewerport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script type="module" src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+	<link href="style.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+	<script type="module">
+    	// Import the functions you need from the SDKs you need
+    	import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+    	import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-analytics.js";
+		const firebaseConfig = {
+		   apiKey: "AIzaSyArvfzLz1yNfhCHhzXytpa-UOVm598Nrjc",
+		   authDomain: "project1-171e7.firebaseapp.com",
+		   databaseURL: "https://project1-171e7-default-rtdb.europe-west1.firebasedatabase.app",
+		   projectId: "project1-171e7",
+		   storageBucket: "project1-171e7.appspot.com",
+		   messagingSenderId: "654194688414",
+		   appId: "1:654194688414:web:a35add33c5af2d72dbd68f",
+		   measurementId: "G-L93J4HTS9C"
+		 };
+
+		  // Initialize Firebase
+		  // firebase.initializeApp(firebaseConfig);
+		  const app = initializeApp(firebaseConfig);
+		  const analytics = getAnalytics(app);
+    </script>
+
+  <!--   initializeApp = require('https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js'); -->
+    <!-- <script type="module" src="https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js"></script> -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js"></script>  
+	
+	<title>Firebase</title>
+</head>
+
+
+<body>
+
+	<!------------
+	  NOTIFICATIONS
+	-------------->
+	<h1 class="notification fillall">Fill all fields</h1>
+	<h1 class="notification inserted">Added successfully</h1>
+	<h1 class="notification updated">Updated successfully</h1>
+
+
+	<!------------
+	  FORM CONTAINTER
+	-------------->
+	<div class="container">
+		<form action="/" method="post" enctype="multipart/form-data">
+			<h1 class="logo">Restaurant Italian</h1>
+				<select name="category">
+					<option value="primi">Primi</option>
+					<option value="secondi">Secondi</option>
+					<option value="contorni">Contorni</option>
+					<option value="Dolci">Dolci</option>
+				</select>
+			<input type="text" name="title" placeholder="Title">
+			<input type="number" name="price" placeholder="Price">
+			<input type="file" name="image">
+			<input type="submit" name="submit" value="Add">
+		</form>
+	</div>
+
+	<script src="menu.js"></script>
+</body>
+</html>
