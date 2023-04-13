@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Write a webpage which contains an horizontal line (an "hr" or "div" or something else) on top of the page. The color of the line is blue. The line starts descending on the bottom of the page (when the mouse is over it) and while descending the part of the web page above the line will start to be colored with a blue vertical gradient color. When the line reaches the bottom of the page, all the web page is colored with a vertical blue gradient. -->
+	<title>Blue Line</title>
+	<title>Line</title>
+	<style>
+		.line {
+			position: fixed;
+			top: 0;
+			left: 0;
+			height: 10px;
+			width: 100%;
+			background-color: blue;
+			z-index: 9999;
+			cursor: pointer;
+			transition: height 5s linear;
+		}
+		
+		body {
+			height: 560px;
+			/*transition: background 1s ease;*/
+		}
+		
+		.line:hover {
+			height: 100%;
+			background: linear-gradient(0deg, white, blue);
+		}
+	</style>
+</head>
+<body>
+	<div class="line"></div>
+</body>
+</html>

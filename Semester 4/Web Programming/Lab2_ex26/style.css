@@ -1,0 +1,88 @@
+/*body{
+	background: #F2F2F2;
+	margin: 0px;
+}*/
+
+/*hr.line {
+	border: 5px solid blue;
+	position: relative;
+	opacity: 1;
+	transition: 0.3;
+	animation-duration: 10s;
+	animation-name: example;
+}
+
+@keyframes example {
+  0%   {background-color:red; top:0px;}
+  100%  {background-color:green; top:560px;}
+}
+*/
+/*hr.line:hover {
+	opacity: 0.5;
+
+}*/
+
+/*#grad {
+	height: 560px;
+	background-color: red;
+	background-image: linear-gradient(0deg, white, blue);
+}*/
+
+/*#arrow i {
+  position: relative;
+  top: 0;
+  transition: top ease 0.5s;
+}
+#arrow:hover i {
+  top: -10px;
+}*/
+
+body {
+  background-color: #fff; /* Set initial background color */
+}
+
+.line {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10px; /* Change height to adjust thickness of line */
+  background-color: blue;
+  z-index: 9999; /* Make sure line is on top of other content */
+  cursor: pointer; /* Change cursor to pointer when hovering over line */
+}
+
+.line:hover {
+  animation: descend 5s forwards; /* Animate line to descend and change background color */
+}
+
+@keyframes descend {
+  0% {
+    transform: translateY(0px);
+    background: linear-gradient(to bottom, blue 0%, blue 0%);
+  }
+  100% {
+    transform: translateY(560px);
+    background: linear-gradient(to bottom, blue 0%, blue 100%); /* Set final background color */
+    /*background: linear-gradient(0deg, white, blue);*/
+  }
+}
+
+body {
+	height: 560px;
+	animation: coloring 1s forwards;
+	/*background-image: linear-gradient(0deg, white, blue);*/
+}
+
+@keyframes coloring {
+ /* 0% {
+    transform: translateY(0px);
+    background: linear-gradient(to bottom, blue 0%, blue 0%);
+  }*/
+  100% {
+    /*transform: translateY(560px);*/
+   /* background: linear-gradient(to bottom, blue 0%, blue 100%);*/ /* Set final background color */
+    /*background: linear-gradient(0deg, white, blue);*/
+    background-image: linear-gradient(0deg, blue, white);
+  }
+}

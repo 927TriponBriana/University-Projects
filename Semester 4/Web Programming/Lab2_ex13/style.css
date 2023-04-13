@@ -1,0 +1,47 @@
+.line1 {
+	width: 200px;
+	height: 200px;
+	border-style: solid none none none; 
+	border-width: 5px;
+	position: absolute;
+	top: 200px;
+	left: 500px;
+	border-image:  linear-gradient(90deg, red, transparent, red) 1;
+}
+
+.line2 {
+	width: 200px;
+	height: 200px;
+	border-style: none solid none none; 
+	border-width: 5px;
+	position: absolute;
+	top: 203px;
+	left: 495px;
+	border-image: linear-gradient(180deg, red, transparent, red) 2;
+}
+
+
+
+.line3 {
+	width: 200px;
+	height: 200px;
+	border-style: solid none none none; 
+	border-width: 5px;
+	position: absolute;
+	top: 200px;
+	left: 500px;
+	border-image:  linear-gradient(90deg, red, transparent, red) 3;
+}
+
+
+.line4 {
+	width: 200px;
+	height: 200px;
+	border-style: none none none solid; 
+	border-width: 5px;
+	position: absolute;
+	top: 200px;
+	left: 500px;
+	border-image:  linear-gradient(180deg, red, transparent, red) 4;
+}
+
