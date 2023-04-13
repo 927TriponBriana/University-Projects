@@ -1,0 +1,93 @@
+%Five businessmen are side by side using the elevator to go from the parking lot to their offices. 
+%Follow the clues to determine who has the biggest salary.
+
+/*
+ * 1. The 40-year-old man is somewhere between Thomas and the man whose parking spot is number 31, in that order.
+ * 2. At the third position is the man who parks on parking spot number 46.
+ * 3. At one of the ends is the man that is going to the 20th floor.
+ * 4. Kenneth earns $80,000 per year.
+ * 5. The man wearing the Purple tie is somewhere between Gary and the man who parks on parking spot number 23, in that order.
+ * 6. The 45-year-old man is next to the man that earns $90,000 per year.
+ * 7. At the fourth position is the man who earns $80,000 per year.
+ * 8. The oldest man is exactly to the right of the man who parks on parking spot number 46.
+ * 9. The 50-year-old man is next to the 45-year-old man.
+ * 10. At the second position is the man whose parking spot is number 19.
+ * 11. The man wearing the Purple tie works on the 30th floor.
+ * 12. Brian is at one of the ends.
+ * 13. The man who earns $90,000 per year is somewhere between the man who parks on parking spot 
+ *     number 19 and the man who earns $80,000 per year, in that order.
+ * 14. The man who is going to the 10th floor is exactly to the right of the man who parks on parking spot number 31.
+ * 15. At the fourth position is the businessman wearing the Red tie.
+ * 16. The man that parks on parking spot number 31 is exactly to the right of the man who works on the 50th floor.
+ * 17. The man wearing the Red tie is somewhere between the 45-year-old man and the man wearing the Black tie, in that order.
+ * 18. Juan is somewhere to the right of the man wearing the Blue tie.
+ * 19. The man wearing the Purple tie has the biggest salary.
+ * 20. At the fifth position is the man who earns $70,000 per year.
+ * */
+
+:- use_rendering(table,
+		 [header(man('Tie','Name','Floor','Salary','Age','Parking' ))]).
+
+nextToLeft(A, B, Ls) :- append(_, [A,B|_], Ls).
+
+nextTo(A,B, Ls):-append(_,[B,A|_], Ls).
+nextTo(A,B, Ls):-append(_,[A,B|_], Ls).
+
+atAnyEnd(A, Ls):- Ls=[A|_].
+atAnyEnd(A, Ls):- Ls=[_,_,_,_,A].
+    
+somewhereLeft(A,B, Ls):- append(_, [A, B|_], Ls).
+somewhereLeft(A,B, Ls):- append(_, [A,_, B|_], Ls).
+somewhereLeft(A,B, Ls):- append(_, [A,_,_, B|_], Ls).
+somewhereLeft(A,B, Ls):- append(_, [A,_,_,_, B|_], Ls).
+
+somewhereBetween(A, B, C, Ls):- somewhereLeft(A, B, Ls), somewhereLeft(B,C, Ls).
+
+men(Men):-
+    %each man in the group is represented as:
+	%  man('Tie', 'Name', 'Floor', 'Salary', 'Age', 'Parking')
+    length(Men, 5),
+    somewhereBetween(man(_,thomas,_,_,_,_), man(_,_,_,_,40,_), man(_,_,_,_,_,31), Men),			%1
+    Men = [_, _, man(_,_,_,_,_,46), _, _],														%2
+    atAnyEnd(man(_,_,20,_,_,_), Men),															%3
+    member(man(_,kenneth,_,80.000,_,_), Men),													%4
+    somewhereBetween(man(_,gary,_,_,_,_), man(purple,_,_,_,_,_), man(_,_,_,_,_,23), Men),		%5
+    nextTo(man(_,_,_,_,45,_), man(_,_,_,90.000,_,_), Men),										%6
+    Men = [_, _, _, man(_,_,_,80.000,_,_), _],													%7
+    nextToLeft(man(_,_,_,_,_,46), man(_,_,_,_,55,_), Men),										%8
+    nextTo(man(_,_,_,_,50,_), man(_,_,_,_,45,_), Men),											%9
+    Men = [_, man(_,_,_,_,_,19), _, _, _],														%10
+    member(man(purple,_,30,_,_,_), Men),														%11
+    atAnyEnd(man(_,brian,_,_,_,_), Men),														%12
+    somewhereBetween(man(_,_,_,_,_,19), man(_,_,_,90.000,_,_), man(_,_,_,80.000,_,_), Men),		%13
+    nextToLeft(man(_,_,_,_,_,31), man(_,_,10,_,_,_), Men),										%14
+    Men = [_, _, _, man(red,_,_,_,_,_), _],														%15
+     nextToLeft(man(_,_,50,_,_,_), man(_,_,_,_,_,31), Men),										%16
+    somewhereBetween(man(_,_,_,_,45,_), man(red,_,_,_,_,_), man(black,_,_,_,_,_), Men),			%17
+    somewhereLeft(man(blue,_,_,_,_,_), man(_,juan,_,_,_,_), Men),								%18
+    member(man(purple,_,_,100.000,_,_), Men),													%19
+    Men = [_, _, _, _, man(_,_,_,70.000,_,_)],													%20
+    member(man(green,_,_,_,_,_), Men),															%one man has the tie green
+    member(man(_,_,40,_,_,_), Men),																%one man works on the 40th floor
+    member(man(_,_,_,60.000,_,_), Men),															%one man has 60,000 salary															
+    member(man(_,_,_,_,35,_), Men),																%one man is 35 years old
+    member(man(_,_,_,_,_,7), Men).																%one man parks on number 7
+    
+man_with_biggest_salary(Man):-
+    men(MenList),
+    member(man(_, Man, _, 100.000, _, _), MenList), !.
+
+
+/*
+ * 		Example:
+ * men(M).
+ * M = [ man(Blue, Gary, 20, $60,000, 50, 7),
+ * 		man(Purple, Thomas, 30, $100,000, 45, 19),
+ * 		man(Green, Juan, 50, $90,000, 40, 46),
+ * 		man(Red, Kenneth, 40, $80,000, 55, 31),
+ * 		man(Black, Brian, 10, $70,000, 35, 23)]
+ * 
+ * man_with_biggest_salary(Man).
+ * Man = Thomas
+ * 
+ * */    
