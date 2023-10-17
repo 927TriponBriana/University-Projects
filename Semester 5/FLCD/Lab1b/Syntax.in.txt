@@ -12,7 +12,7 @@ iostmt = (“cin” “>>” | “cout” “<<”) IDENTIFIER “;”
 assignstmt = IDENTIFIER “=” expression;
 expression = [expression (“+” | “-“)] term
 term = term (“*” | “/”) factor | factor
-factor = “(“ expression “)” | IDENTIFIER
+factor = “(“ expression “)” | (IDENTIFIER | CONSTANT)
 structstmt = cmpdstmt | ifstmt | forstmt
 ifstmt = “if” “(“ condition “)” stmt [“else” “(“ stmt “)”]
 condition = expression RELATION expression
