@@ -1,0 +1,31 @@
+Specification:
+Alphabet:
+	a.	Upper (A-Z) and lower-case letters (a-z) of the English alphabet;
+	b.	Decimal digits (0-9);
+	c.	Underscore (‘_’)
+Lexic:
+	a.	Special symbols, representing:
+		-	Operators + - * / < > <= >= == = != >> &&
+		-	Separators () {} ; space %
+		-	Reserved words: int bool string cin if print for else array BEGIN END
+
+	b.	Identifiers:
+		-	A sequence of letters, digits and underscores, such that the first character is a letter and intertwining is allowed 		(example: pf_1e, p_1fe); the rule is:
+		identifier =  letter | letter{letter | digit | underscore}
+		letter = “A” | “B” | … | “Z” | “a” | “b” | … | “z”
+		digit = “0” | “1” | … | “9”
+		underscore = “_”
+
+	c.	Constants:
+		1.	Integer –  things like 001, -0 are not allowed, the rule is:
+			integer = “0” | [“+” | “-”] nonzerodigit {digit}
+			nonzerodigit = “1” | “2” | … | “9”
+
+		2.	Character
+			character = “letter” | ”digit”
+
+		3.	String
+			string = ‘{letter | digit}’
+
+	CONSTANT = integer | character | string
+

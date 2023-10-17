@@ -1,0 +1,23 @@
+Syntax:
+program = “%” cmpdstmt “%”
+cmpdstmt = “BEGIN” stmtlist “END”
+stmtlist = stmt | stmt “;” stmtlist
+stmt = simplestmt | structstmt
+simplestmt = (declaration | iostmt | assignstmt) “;”
+declaration = type “ “ IDENTIFIER “;”
+type = simpletype | arraydecl
+simpletype = “int” | “bool” | “string”
+arraydecl = simpletype “array” “[“  integer “]”
+iostmt = (“cin” “>>” | “cout” “<<”) IDENTIFIER “;”
+assignstmt = IDENTIFIER “=” expression;
+expression = [expression (“+” | “-“)] term
+term = term (“*” | “/”) factor | factor
+factor = “(“ expression “)” | IDENTIFIER
+structstmt = cmpdstmt | ifstmt | forstmt
+ifstmt = “if” “(“ condition “)” stmt [“else” “(“ stmt “)”]
+condition = expression RELATION expression
+RELATION = “<” | “<=” | “==” | “>=” | “>” | “!=”
+forstmt = “for” header stmt
+header = “(“ “int” assignstmt “;” condition “;” assignment “)”
+
+
