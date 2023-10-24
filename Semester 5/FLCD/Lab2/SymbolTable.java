@@ -9,7 +9,9 @@ public class SymbolTable<Value> {
     }
 
     public void add(Value value) {
-        hashTable.addToHashTable(value);
+        if(!hashTable.contains(value)) {
+            hashTable.addToHashTable(value);
+        }
     }
 
     public boolean contains(Value value) {
