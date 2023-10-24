@@ -8,12 +8,13 @@ public class Main {
         identifierSymbolTable.add("y");
         constantSymbolTable.add(1);
         constantSymbolTable.add(6);
+        constantSymbolTable.add(6);
 
-        System.out.println("Contains 'x': " + identifierSymbolTable.contains("x"));
-        System.out.println("Contains 'z': " + identifierSymbolTable.contains("z"));
-
-        System.out.println("Contains 1: " + constantSymbolTable.contains(1));
-        System.out.println("Contains 6: " + constantSymbolTable.contains(6));
+//        System.out.println("Contains 'x': " + identifierSymbolTable.contains("x"));
+//        System.out.println("Contains 'z': " + identifierSymbolTable.contains("z"));
+//
+//        System.out.println("Contains 1: " + constantSymbolTable.contains(1));
+//        System.out.println("Contains 6: " + constantSymbolTable.contains(6));
 
         int position = constantSymbolTable.getPosition(1);
         if(position != -1) {
