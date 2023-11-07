@@ -115,44 +115,49 @@ public class MyScanner {
     }
 
     private boolean verifyIfIdentifier() {
-        var regexIdentifier = Pattern.compile("^([a-z][a-zA-Z0-9_]*)");
-        var matcher = regexIdentifier.matcher(program.substring(index));
-        if(matcher.find()) {
-            var identifier = matcher.group(1);
-            if(!checkIfValid(identifier, program.substring(index))) {
-                return false;
-            }
+        String regex = "^[a-z][a-zA-Z0-9_]*";
+        Pattern pattern = Pattern.compile(regex);
 
-            if (Character.isDigit(identifier.charAt(0))) {
-                return false;
-            }
+        // Extract a substring from the current position
+        String remainingProgram = program.substring(index);
 
-            index += identifier.length();
-            int position;
-            try {
-                position = symbolTable.addIdentifier(identifier);
-            } catch (Exception e) {
-                position = symbolTable.getIdentifierPosition(identifier);
+        var matcher = pattern.matcher(remainingProgram);
+
+        if (matcher.find()) {
+            String identifier = matcher.group();
+
+            if (checkIfValid(identifier)) {
+                // Check if the first character is not a digit
+                if (!Character.isDigit(identifier.charAt(0))) {
+                    index += identifier.length();
+
+                    int position;
+                    try {
+                        position = symbolTable.addIdentifier(identifier);
+                    } catch (Exception e) {
+                        // Handle the case where the identifier already exists
+                        position = symbolTable.getIdentifierPosition(identifier);
+                    }
+
+                    PIF.add(new ScannedItem("id", position));
+                    return true;
+                }
             }
-            PIF.add(new ScannedItem("id", position));
-            return true;
         }
-        //System.out.println(program.substring(index) + '\n');
-
         return false;
     }
 
-
-    private boolean checkIfValid(String identifier, String substring) {
-        if(reservedWords.contains(identifier)) {
-            return false;
+    private boolean checkIfValid(String identifier){
+        // Check if the identifier is not a reserved word
+        if (!reservedWords.contains(identifier)) {
+            if (Pattern.matches("^[a-z][a-zA-Z0-9_]*", identifier)) {
+                // Check if the identifier is not the start of an integer constant
+                if (!Pattern.matches("^[0-9]+[a-zA-Z_][a-zA-Z0-9_]*", identifier)) {
+                    return true;
+                }
+            }
         }
-
-        if(Pattern.compile("^(?![0-9])[a-zA-Z_][a-zA-Z0-9_]*").matcher(substring).find()) {
-            return true;
-        }
-
-        return symbolTable.hasIdentifier(identifier);
+        return false;
     }
 
 
