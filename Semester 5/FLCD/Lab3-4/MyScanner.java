@@ -88,7 +88,7 @@ public class MyScanner {
                 }
                 index++;
             } else {
-                break; // Exit the loop when a non-whitespace character is encountered
+                break;
             }
         }
     }
@@ -135,7 +135,6 @@ public class MyScanner {
                     try {
                         position = symbolTable.addIdentifier(identifier);
                     } catch (Exception e) {
-                        // Handle the case where the identifier already exists
                         position = symbolTable.getIdentifierPosition(identifier);
                     }
 
