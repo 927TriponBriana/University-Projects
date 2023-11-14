@@ -1,0 +1,12 @@
+BEGIN
+int a, b, c;
+cin >> a;
+cin >> b;
+cin >> c;
+if (a <= b && a <= c)
+	print(a);
+else if (b <= a && b <= c)
+	print(b);
+else
+	print(c);
+END

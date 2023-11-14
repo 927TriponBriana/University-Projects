@@ -1,0 +1,12 @@
+BEGIN
+int array[10] arr;@
+int n;
+int 2sum;
+cin >> n;
+2sum = 0;
+for(int i=0; i<n; i++)
+	cin >> arr[i];
+	if(arr[i] > 0)
+	2sum = 2sum + arr[i];
+print(2sum);
+END

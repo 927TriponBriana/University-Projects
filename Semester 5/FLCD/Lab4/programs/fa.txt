@@ -1,0 +1,5 @@
+states a, b, c
+alphabet 0, 1
+transitions a, 0, a; b, 1, a; c, 1, c; c, 1, b
+initial a
+finals a, c
