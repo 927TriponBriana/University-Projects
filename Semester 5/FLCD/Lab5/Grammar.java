@@ -90,7 +90,7 @@ public class Grammar {
             String lhs = production.getKey();
             List<String> rhs = production.getValue();
 
-            if(!nonTerminals.contains(lhs)) {
+            if(!nonTerminals.contains(lhs) || nonTerminals.indexOf(lhs) == -1) {
                 System.out.println("Error: the left hand side is not a single nonterminal");
                 return false;
             }
@@ -98,7 +98,7 @@ public class Grammar {
             for (String symbol : rhs) {
                 String[] symbols = symbol.split("");
                 for(String s : symbols) {
-                    if (!(terminals.contains(s) || nonTerminals.contains(s) || s.equals("|"))) {
+                    if (!(terminals.contains(s) || nonTerminals.contains(s) || s.equals("|") || s.equals("ε"))) {
                         System.out.println("Error: the right hand side symbols that ar not terminals or nonterminals: " + " " + s);
                         return false;
                     }
